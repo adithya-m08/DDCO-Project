@@ -12,8 +12,10 @@ wire [1:0] out;
 
 reg4 rg1(a1,clk,start,a);
 
-assign t[0] = a1[0] & p[0]; assign t[1] = a1[1] & p[0];
-assign t[2] = a1[2] & p[0]; assign t[3] = a1[3] & p[0];
+assign t[0] = a1[0] & p[0]; 
+assign t[1] = a1[1] & p[0];
+assign t[2] = a1[2] & p[0]; 
+assign t[3] = a1[3] & p[0];
 
 adder_4bit ad(p[8:5],t,c,cy);
 

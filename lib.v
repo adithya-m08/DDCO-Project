@@ -1,25 +1,19 @@
-module mux(A,B,S,Y);
-
-    input  A,B;
-    output  Y;
-    input S;
-
-
+module mux(input wire A,B,S, output wire Y);
 assign Y = (S)? B : A;
 endmodule
 
-module ha(input a,b,output sum,co);
+module ha(input a,b,output sum,cout);
 assign sum = a^b;
-assign co = a&b;
+assign cout = a&b;
 endmodule
 
-module fa(a,b,cin,sum,co);
+module fa(a,b,cin,sum,cout);
 input a,b,cin;
-output sum,co; 
+output sum,cout; 
 wire t1,t2,t3;
 ha X1(a,b,t1,t2);
 ha X2(cin,t1,sum,t4);
-assign co = t2 | t4;
+assign cout = t2 | t4;
 endmodule
 
 module adder_4bit(a,b,sum,cy);
@@ -27,10 +21,10 @@ input [3:0] a,b;
 output [3:0] sum;
 output cy;
 
-fa m1(a[0],b[0],1'b0,sum[0],co1);
-fa m2(a[1],b[1],co1,sum[1],co2);
-fa m3(a[2],b[2],co2,sum[2],co3);
-fa m4(a[3],b[3],co3,sum[3],cy);
+fa m1(a[0],b[0],1'b0,sum[0],cout1);
+fa m2(a[1],b[1],cout1,sum[1],cout2);
+fa m3(a[2],b[2],cout2,sum[2],cout3);
+fa m4(a[3],b[3],cout3,sum[3],cy);
 
 endmodule
 
@@ -79,23 +73,14 @@ module pg(start,tc,q,clk,reset);
 	 DFF d2(t2,clk,reset,t1);
 endmodule
 
-module reg4(y,clk,en,a);
-    input [3:0] a;
-    output [3:0] y;
-    input clk,en;
- 
+module reg4(output wire [3:0]y,input wire clk,en, input wire [3:0]a);
 fdce d1(y[0],clk,en,a[0]);
 fdce d2(y[1],clk,en,a[1]);
 fdce d3(y[2],clk,en,a[2]);
 fdce d4(y[3],clk,en,a[3]);
-
 endmodule
 
-module Regbank(clk,start,ld,cy,c,b,p);
-
-input [3:0] c,b;
-output [8:0] p;
-input clk,start,ld,cy;
+module Regbank(input wire clk,start,ld,cy,input wire [3:0]c,b,output wire [8:0] p);
 wire en1,en2;
 fdce f1(p[8],clk,ld,cy);
 

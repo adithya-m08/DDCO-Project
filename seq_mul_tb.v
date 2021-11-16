@@ -24,18 +24,53 @@ always #10 clk = ~clk;
 		a = 0;
 		b = 0;
 
-		// Wait 100 ns for global reset to finish
+		//reset
 		#109.5;
         start = 1;
-		  a = 4'b1001;
-		b = 4'b1101;
+		  a = 4'b0101;
+		b = 4'b1001;
 		#20;
 		start = 0;
 		  a = 0;
 		b = 0;
-		// Add stimulus here
+		// #100 $finish;
+	end
+	initial begin
+		clk = 0;
+		start = 0;
+		a = 0;
+		b = 0;
+
+		//reset
+		#109.5;
+        start = 1;
+		  a = 4'b1001;
+		b = 4'b1001;
+		#20;
+		start = 0;
+		  a = 0;
+		b = 0;
 		#100 $finish;
 	end
+		// #150;
+		// start = 1;
+		//   a = 4'b0101;
+		// b = 4'b0011;
+		// #20;
+		// start = 0;
+		//   a = 0;
+		// b = 0;
+
+		// #150;
+		// start = 1;
+		//   a = 4'b1001;
+		// b = 4'b0101;
+		// #20;
+		// start = 0;
+		//   a = 0;
+		// b = 0;
+	// 	#100 $finish;
+	// end
       
 endmodule
 
