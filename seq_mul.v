@@ -1,9 +1,5 @@
 `timescale 1ns / 1ps
-module seq_mul(clk,start,a,b,op);
-    input [7:0] a,b;
-    input clk,start;
-    output [15:0] op;
-
+module seq_mul(input wire clk,start,input wire [7:0] a,b, output wire [15:0] op);
     wire [16:0] p;
     wire [7:0] t,c,a1;
     wire ld,load,shift,cy;
