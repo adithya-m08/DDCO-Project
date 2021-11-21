@@ -44,8 +44,8 @@ always #10 clk = ~clk;
 		//reset
 		#109.5;
         start = 1;
-		  a = 4'b1001;
-		b = 4'b1001;
+		  a = 4'b1101;
+		b = 4'b0101;
 		#20;
 		start = 0;
 		  a = 0;
