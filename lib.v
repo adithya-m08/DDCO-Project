@@ -1,7 +1,4 @@
-module pg(start,tc,q,clk,reset);
-  input start,tc,clk,reset;
-  output  q;
-    
+module pg(input wire clk, reset, start, tc, output wire q);
   wire t1,t2;
   parameter vdd=1'b1;
   parameter gnd=1'b0;
@@ -11,46 +8,54 @@ module pg(start,tc,q,clk,reset);
   dfr d2(clk, reset, t1, t2);
 endmodule
 
-module reg4(input wire clk, en, input wire [3:0] a, output wire [3:0] y);
+module reg4(input wire clk, en, input wire [7:0] a, output wire [7:0] y);
   dfl dfl_1(clk, en, a[0], y[0]);
   dfl dfl_2(clk, en, a[1], y[1]);
   dfl dfl_3(clk, en, a[2], y[2]);
   dfl dfl_4(clk, en, a[3], y[3]);
+  dfl dfl_5(clk, en, a[4], y[4]);
+  dfl dfl_6(clk, en, a[5], y[5]);
+  dfl dfl_7(clk, en, a[6], y[6]);
+  dfl dfl_8(clk, en, a[7], y[7]);
 endmodule
 
-module reg8(input wire clk,start,ld,cy,input wire [3:0]c,b,output wire [8:0] p);
+module reg8(input wire clk,start,ld,cy,input wire [7:0] c, b, output wire [16:0] p);
   wire en2;
-  dfl dfl_1(clk, ld, cy, p[8]);
-  dfl dfl_2(clk, ld, c[3], p[7]);
-  dfl dfl_3(clk, ld, c[2], p[6]);
-  dfl dfl_4(clk, ld, c[1], p[5]);
-  dfl dfl_5(clk, ld, c[0], p[4]);
+  dfl dfl_0(clk, ld, cy, p[16]);
+
+  dfl dfl_1(clk, ld, c[7], p[15]);
+  dfl dfl_2(clk, ld, c[6], p[14]);
+  dfl dfl_3(clk, ld, c[5], p[13]);
+  dfl dfl_4(clk, ld, c[4], p[12]);
+  dfl dfl_5(clk, ld, c[3], p[11]);
+  dfl dfl_6(clk, ld, c[2], p[10]);
+  dfl dfl_7(clk, ld, c[1], p[9]);
+  dfl dfl_8(clk, ld, c[0], p[8]);
 
   // module mux_df(input wire clk, i0, i1, s, load, output wire z_);
-  mux_df muxdf_0(clk, p[4], b[3], start, en2, p[3]);
-  mux_df muxdf_1(clk, p[3], b[2], start, en2, p[2]);
-  mux_df muxdf_2(clk, p[2], b[1], start, en2, p[1]);
-  mux_df muxdf_3(clk, p[1], b[0], start, en2, p[0]);
+  mux_df muxdf_0(clk, p[8], b[7], start, en2, p[7]);
+  mux_df muxdf_1(clk, p[7], b[6], start, en2, p[6]);
+  mux_df muxdf_2(clk, p[6], b[5], start, en2, p[5]);
+  mux_df muxdf_3(clk, p[5], b[4], start, en2, p[4]);
+  mux_df muxdf_4(clk, p[4], b[3], start, en2, p[3]);
+  mux_df muxdf_5(clk, p[3], b[2], start, en2, p[2]);
+  mux_df muxdf_6(clk, p[2], b[1], start, en2, p[1]);
+  mux_df muxdf_7(clk, p[1], b[0], start, en2, p[0]);
+  
 
 assign en2 = start | ld;
 endmodule
 
-module cnt4(out, data, load, en, clk, tc, lmt);
-  output [1:0] out;
-  output reg tc;
-  input [1:0] data;
-  input load, en, clk;
-  reg [1:0] out;
+module cnt4(input wire clk, load, en, input wire [2:0] data, lmt, output reg tc, output reg [1:0] out);
   parameter reset=0;
-  input [1:0]lmt;
-  initial begin out=2'b00; tc=0; end
+  initial begin out=3'b000; tc=0; end
   always @(posedge clk)
-  if (reset) begin out <= 2'b00 ; end 
+  if (reset) begin out <= 3'b000 ; end 
   else if (load) begin out <= data; end 
-  else if (en) out <= out + 2'b01;
+  else if (en) out <= out + 3'b001;
   else out <= out;
   always @(posedge clk)
-  if (out ==lmt) tc<=1;
+  if (out == lmt) tc <= 1;
   else tc<=0;
 endmodule
 
@@ -78,12 +83,16 @@ module mux_df(input wire clk, i0, i1, s, load, output wire z_);
   dfl dfl_0(clk, load, d_in, z_);
 endmodule
 
-module ripple_carry_4_bit(input wire [3:0] a,b, output wire [3:0] s, output wire cout);
-  wire [2:0] c;
+module ripple_carry_4_bit(input wire [7:0] a,b, output wire [7:0] s, output wire cout);
+  wire [6:0] c;
   fulladd f_0(a[0], b[0], 1'b0, s[0], c[0]);
   fulladd f_1(a[1], b[1], c[0], s[1], c[1]);
   fulladd f_2(a[2], b[2], c[1], s[2], c[2]);
-  fulladd f_3(a[3], b[3], c[2], s[3], cout);
+  fulladd f_3(a[3], b[3], c[2], s[3], c[3]);
+  fulladd f_4(a[4], b[4], c[3], s[4], c[4]);
+  fulladd f_5(a[5], b[5], c[4], s[5], c[5]);
+  fulladd f_6(a[6], b[6], c[5], s[6], c[6]);
+  fulladd f_7(a[7], b[7], c[6], s[7], cout);
 endmodule
 
 module df (input wire clk, in, output wire out);

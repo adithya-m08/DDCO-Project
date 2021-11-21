@@ -4,10 +4,10 @@ module seq_mul_tb;
 	// Inputs
 	reg clk;
 	reg start;
-	reg [3:0] a;
-	reg [3:0] b;
+	reg [7:0] a;
+	reg [7:0] b;
 
-   wire [7:0] op;
+   wire [15:0] op;
 	initial begin $dumpfile("tb.vcd"); $dumpvars(0,seq_mul_tb); end
 	seq_mul uut (
 		.clk(clk), 
@@ -25,32 +25,15 @@ always #10 clk = ~clk;
 		b = 0;
 
 		//reset
-		#109.5;
+		#100;
         start = 1;
-		  a = 4'b0101;
-		b = 4'b1001;
-		#20;
-		start = 0;
-		  a = 0;
-		b = 0;
-		// #100 $finish;
-	end
-	initial begin
-		clk = 0;
+		a = 8'b01011101;
+		b = 8'b10110101;
+		#25;
 		start = 0;
 		a = 0;
 		b = 0;
-
-		//reset
-		#109.5;
-        start = 1;
-		  a = 4'b1101;
-		b = 4'b0101;
-		#20;
-		start = 0;
-		  a = 0;
-		b = 0;
-		#100 $finish;
+		#160 $finish;
 	end
 		// #150;
 		// start = 1;
